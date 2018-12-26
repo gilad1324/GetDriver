@@ -3,7 +3,7 @@ package com.jct.gilad.getdriver.model.entities;
 public class Driver {
     private String lastName;
     private String firstName;
-    private int id;
+    private String id;
     private String phoneNumber;
     private String email;
     private String creditCard;
@@ -24,11 +24,11 @@ public class Driver {
         this.firstName = firstName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
