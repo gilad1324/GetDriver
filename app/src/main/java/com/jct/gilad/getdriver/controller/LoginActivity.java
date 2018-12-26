@@ -1,4 +1,4 @@
-package com.jct.gilad.getdriver;
+package com.jct.gilad.getdriver.controller;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jct.gilad.getdriver.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
