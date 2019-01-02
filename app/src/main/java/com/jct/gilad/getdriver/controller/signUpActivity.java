@@ -3,13 +3,11 @@ package com.jct.gilad.getdriver.controller;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.jct.gilad.getdriver.R;
-
-public class LoginActivity extends AppCompatActivity {
+public class signUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
     }
 }
