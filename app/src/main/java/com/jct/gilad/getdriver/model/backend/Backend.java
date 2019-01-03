@@ -6,18 +6,26 @@ import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 import com.jct.gilad.getdriver.model.entities.Driver;
 import com.jct.gilad.getdriver.model.entities.Ride;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public interface Backend {
-    List<String> getDriversNames();
-    void addDriver(Driver driver, FireBase_DbManager.Action<String> action);
-    List<Ride> getAvailableRides();
-    List<Ride> getFinishedRides();
-    List<Ride> getRidesByDriver(Driver driver);
-    List<Ride> getAvailableRidesByDestCity(Location location);
-    List<Ride> getAvailableRidesCloseToDriver(Driver driver);
-    List<Ride> getRidesByDate(Date date);
-    List<Ride> getRidesByPayment();
+    ArrayList<String> getDriversNames();
 
+    void addDriver(Driver driver, FireBase_DbManager.Action<String> action);
+
+    ArrayList<Ride> getAvailableRides();
+
+    ArrayList<Ride> getFinishedRides();
+
+    ArrayList<Ride> getRidesByDriver(Driver driver);
+
+    ArrayList<Ride> getAvailableRidesByDestCity(Location location);
+
+    ArrayList<Ride> getAvailableRidesCloseToDriver(Driver driver);
+
+    ArrayList<Ride> getRidesByDate(Date date);
+
+    ArrayList<Ride> getRidesByPayment();
 }
