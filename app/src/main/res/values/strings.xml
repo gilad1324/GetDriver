@@ -13,4 +13,9 @@
         completions."
     </string>
     <string name="title_activity_login">Sign in</string>
+    <string name="action_sign_up">sign_up</string>
+    <string name="action_log_in">Log in</string>
+    <string name="hint_phone">phone number</string>
+    <string name="action_id">ID</string>
+    <string name="credit_card">Credit card</string>
 </resources>
