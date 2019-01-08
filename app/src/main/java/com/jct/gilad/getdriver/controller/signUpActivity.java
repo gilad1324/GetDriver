@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.jct.gilad.getdriver.R;
 
+
 public class signUpActivity extends AppCompatActivity {
 
     @Override
