@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
 
 
-public class signUpActivity extends AppCompatActivity {
+public class signUpActivity extends AppCompatActivity implements View.OnClickListener {
     //edit text argument
     private EditText FirstNameEditText;
     private EditText LastNameEditText;
@@ -71,6 +72,56 @@ public class signUpActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v==SignUpButton) {
+            submitForm();
+
+        }
+
+
+    }
+    private void submitForm() {
+
+
+
+
+
+
+
+
+        if (!validateFirstName()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!validateLastName()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!validatePhone()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!validateId()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!validateEmail()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_email, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!validatePassword()) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_pass, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
+        //somthing to sign up
+    }
+
     private class MyTextWatcher implements TextWatcher {
 
         private View view;
@@ -99,7 +150,7 @@ public class signUpActivity extends AppCompatActivity {
                 case R.id.PhoneEditText:
                     validatePhone();
                     break;
-                    case R.id.email:
+                case R.id.email:
                     validateEmail();
                     break;
                 case R.id.password:
@@ -107,7 +158,7 @@ public class signUpActivity extends AppCompatActivity {
                     break;
             }
         }
-}
+    }
 
     private boolean validatePassword() {
         String password = PasswordEditText.getText().toString().trim();
