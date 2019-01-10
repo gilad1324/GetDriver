@@ -3,10 +3,21 @@ package com.jct.gilad.getdriver.model.entities;
 public class Driver {
     private String lastName;
     private String firstName;
+    private String password;
     private String id;
     private String phoneNumber;
     private String email;
     private String creditCard;
+
+    public Driver(String lastName, String firstName, String password, String id, String phoneNumber, String email, String creditCard) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.password = password;
+        this.id = id;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.creditCard = creditCard;
+    }
 
     public String getLastName() {
         return lastName;
@@ -54,5 +65,13 @@ public class Driver {
 
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
