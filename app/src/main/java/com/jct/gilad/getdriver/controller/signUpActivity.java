@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
+import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
+import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
+import com.jct.gilad.getdriver.model.entities.Driver;
 
 
 public class signUpActivity extends AppCompatActivity implements View.OnClickListener {
@@ -113,9 +116,48 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(getApplicationContext(), R.string.err_msg_pass, Toast.LENGTH_SHORT).show();
             return;
         }
+        if(BackendFactorySingleton.getBackend(this).chackPassword(PasswordEditText.getText().toString().trim(),EmailEditText.getText().toString().trim()))
+        {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_alr, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
-        //somthing to sign up
+        addDriver();
+    }
+
+    private void addDriver() {
+        try{
+        String FirstName=FirstNameEditText.getText().toString().trim();
+        String LastName=LastNameEditText.getText().toString().trim();
+        String ID=IDEditText.getText().toString().trim();
+        String Phone=PhoneEditText.getText().toString().trim();
+        String CreditCard=CreditCardEditText.getText().toString().trim();
+        String Email=EmailEditText.getText().toString().trim();
+        String Password=PasswordEditText.getText().toString().trim();
+        Driver driver=new Driver(LastName,FirstName,Password,ID,Phone,Email,CreditCard);
+
+        BackendFactorySingleton.getBackend(this).addDriver(driver, new FireBase_DbManager.Action<String>() {
+            @Override
+            public void onSuccess(String obj) {
+                Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+
+            @Override
+            public void onProgress(String status, double percent) {
+
+            }
+        });
+    } catch (Exception e) {
+
+    }
+
+
     }
 
     private class MyTextWatcher implements TextWatcher {

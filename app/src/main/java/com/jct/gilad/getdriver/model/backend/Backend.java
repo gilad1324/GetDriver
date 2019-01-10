@@ -29,4 +29,8 @@ public interface Backend {
     ArrayList<Ride> getRidesByDate(Date date);
 
     ArrayList<Ride> getRidesByPayment(double min, double max);
+
+    ArrayList<String> getDriversEmails();
+
+    public boolean chackPassword(String password,String email);
 }

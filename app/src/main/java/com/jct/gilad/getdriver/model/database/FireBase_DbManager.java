@@ -85,6 +85,21 @@ public class FireBase_DbManager implements Backend {
         return names;
     }
 
+    public ArrayList<String> getDriversEmails() {
+        ArrayList<String> emails = new ArrayList<>();
+        for (Driver driver : DriversList)
+            emails.add(driver.getEmail());
+        return emails;
+    }
+    public boolean chackPassword(String password,String email) {
+
+        for (Driver driver : DriversList)
+            if(driver.getEmail()==email&&driver.getPassword()==password)
+                return true;
+
+        return false;
+    }
+
     @Override
     public void addDriver(final Driver driver, final Action<String> action) {
         String key = driver.getId();

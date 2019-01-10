@@ -22,4 +22,7 @@
     <string name="err_msg_email">Enter valid email address</string>
     <string name="err_msg_pass">the password to short</string>
     <string name="err_msg_phone">Enter valid phone number</string>
+    <string name="msg_booked">Your driver has been successfully booked</string>
+    <string name="err_msg_det">the details are not currect</string>
+    <string name="err_msg_alr">the password and the email alredy exist</string>
 </resources>

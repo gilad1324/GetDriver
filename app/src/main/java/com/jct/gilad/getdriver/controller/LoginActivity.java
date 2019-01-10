@@ -1,5 +1,6 @@
 package com.jct.gilad.getdriver.controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +8,12 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
+import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
+
+import java.util.ArrayList;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -16,6 +21,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText PasswordEditText;
     private Button SignUpButton;
     private Button LogInButton;
+    Context co;
 
 
 
@@ -45,8 +51,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if(v==LogInButton){
+            co=v.getContext();
+            logIn();
 
         }
+
+    }
+
+    private void logIn() {
+        String email=EmailEditText.getText().toString().trim();
+        String password=PasswordEditText.getText().toString().trim();
+        ArrayList<String> emails =BackendFactorySingleton.getBackend(this).getDriversEmails();
+        if(BackendFactorySingleton.getBackend(this).chackPassword(password,email)) {
+            Toast.makeText(getApplicationContext(), R.string.err_msg_det, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent myIntent = new Intent(co, MainActivity.class);
+        myIntent.putExtra("driverEmail",email);
+        startActivityForResult(myIntent, 0);
+
+
+
+
+
 
     }
 }
