@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -82,11 +83,6 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
     private void submitForm() {
-
-
-
-
-
 
 
 
@@ -196,10 +192,10 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean validatePhone() {
-        String iD = PhoneEditText.getText().toString().trim();
+        String phone = PhoneEditText.getText().toString().trim();
 
-        if (iD.length()<9) {
-            Phone_InputLayout.setError(getString(R.string.err_msg_FirstName));
+        if (phone.isEmpty() || !isValidPhone(phone)) {
+            Phone_InputLayout.setError(getString(R.string.err_msg_phone));
             requestFocus(PhoneEditText);
             return false;
         } else {
@@ -207,7 +203,15 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         return true;
+
+
     }
+
+    private static boolean isValidPhone(String phone) {
+        return !TextUtils.isEmpty(phone) && Patterns.PHONE.matcher(phone).matches();
+    }
+
+
 
     private boolean validateId() {
         String iD = IDEditText.getText().toString().trim();
