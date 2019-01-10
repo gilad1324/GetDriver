@@ -6,7 +6,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,45 +21,68 @@ import com.jct.gilad.getdriver.model.entities.Ride;
 import com.jct.gilad.getdriver.model.entities.Status1;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FireBase_DbManager extends Activity implements Backend {
+public class FireBase_DbManager implements Backend {
     static DatabaseReference RidesRef;
     static List<Ride> RidesList;
 
     static DatabaseReference DriversRef;
     static List<Driver> DriversList;
 
+    Geocoder gcd;
+
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         RidesRef = database.getReference("rides");
-        RidesList = new ArrayList<Ride>();
-
         DriversRef = database.getReference("drivers");
-        DriversList = new ArrayList<Driver>();
     }
 
-    @Override
-    public ArrayList<String> getDriversNames() {
-        final ArrayList<String> driversNames = new ArrayList<>();
-        DriversRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot driver : dataSnapshot.getChildren()) {
-                    String name = driver.getValue(Driver.class).getFirstName() + driver.getValue(Driver.class).getLastName();
+    public FireBase_DbManager(Context context) {
+        gcd = new Geocoder(context, Locale.getDefault());
+        RidesList = new ArrayList<Ride>();
+        DriversList = new ArrayList<Driver>();
 
-                    driversNames.add(name);
+        RidesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                RidesList.clear();
+                for (DataSnapshot rideSnapshot : dataSnapshot.getChildren()) {
+                    RidesList.add(rideSnapshot.getValue(Ride.class));
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-        return driversNames;
+        DriversRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DriversList.clear();
+                for (DataSnapshot driverSnapshot : dataSnapshot.getChildren()) {
+                    DriversList.add(driverSnapshot.getValue(Driver.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public ArrayList<String> getDriversNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (Driver driver : DriversList)
+            names.add(driver.getFirstName() + " " + driver.getLastName());
+        return names;
     }
 
     @Override
@@ -83,63 +105,32 @@ public class FireBase_DbManager extends Activity implements Backend {
 
     @Override
     public ArrayList<Ride> getAvailableRides() {
-        final ArrayList<Ride> rides = new ArrayList<>();
-        RidesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ride : dataSnapshot.getChildren()) {
-                    if (ride.getValue(Ride.class).getStatus() == Status1.AVAILABLE)
-                        rides.add(ride.getValue(Ride.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        ArrayList<Ride> rides = new ArrayList<>();
+        for (Ride ride : RidesList)
+            if (ride.getStatus() == Status1.AVAILABLE)
+                rides.add(ride);
         return rides;
     }
 
     @Override
     public ArrayList<Ride> getFinishedRides() {
-        final ArrayList<Ride> rides = new ArrayList<>();
-        RidesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ride : dataSnapshot.getChildren()) {
-                    if (ride.getValue(Ride.class).getStatus() == Status1.FINISHED)
-                        rides.add(ride.getValue(Ride.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        ArrayList<Ride> rides = new ArrayList<>();
+        for (Ride ride : RidesList)
+            if (ride.getStatus() == Status1.FINISHED)
+                rides.add(ride);
         return rides;
     }
 
     @Override
     public ArrayList<Ride> getRidesByDriver(final Driver driver) {
-        final ArrayList<Ride> rides = new ArrayList<>();
-        RidesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ride : dataSnapshot.getChildren()) {
-                    if (ride.getValue(Ride.class).getDriverID() == driver.getId())
-                        rides.add(ride.getValue(Ride.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        ArrayList<Ride> rides = new ArrayList<>();
+        for (Ride ride : RidesList)
+            if (ride.getDriverID() == driver.getId())
+                rides.add(ride);
         return rides;
     }
 
     public String getCityName(Location location) {
-        Geocoder gcd = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -155,37 +146,47 @@ public class FireBase_DbManager extends Activity implements Backend {
 
     @Override
     public ArrayList<Ride> getAvailableRidesByDestCity(final Location location) {
-        final ArrayList<Ride> rides = new ArrayList<>();
-        RidesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot r : dataSnapshot.getChildren()) {
-                    Ride ride = r.getValue(Ride.class);
-                    if (ride.getStatus() == Status1.AVAILABLE && getCityName(location) == getCityName(ride.getDestLocation()))
-                        rides.add(ride);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        ArrayList<Ride> rides = new ArrayList<>();
+        for (Ride ride : RidesList)
+            if (ride.getStatus() == Status1.AVAILABLE &&
+                    getCityName(location) == getCityName(ride.getDestLocation()))
+                rides.add(ride);
         return rides;
     }
 
     @Override
-    public ArrayList<Ride> getAvailableRidesCloseToDriver(Driver driver) {
-        return null;
+    public ArrayList<Ride> getAvailableRidesCloseToLocation(Location location) {
+        ArrayList<Ride> rides = new ArrayList<>();
+        for (Ride ride : RidesList)
+            if (ride.getStatus() == Status1.AVAILABLE &&
+                    location.distanceTo(ride.getSourceLocation()) < 3000)
+                rides.add(ride);
+        return rides;
     }
 
     @Override
     public ArrayList<Ride> getRidesByDate(Date date) {
-        return null;
+        ArrayList<Ride> rides = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        for (Ride ride : RidesList)
+            if (sdf.format(date).equals(sdf.format(ride.getStartTime())))
+                rides.add(ride);
+        return rides;
     }
 
     @Override
-    public ArrayList<Ride> getRidesByPayment() {
-        return null;
+    public ArrayList<Ride> getRidesByPayment(double min, double max) {
+        ArrayList<Ride> rides = new ArrayList<>();
+        double payment;
+        for (Ride ride : RidesList) {
+            if (ride.getStatus() == Status1.FINISHED) {
+                //for every minute the payment is 2 (shekels?)
+                payment = (ride.getEndTime().getTime() - ride.getStartTime().getTime()) / 60000.0 * 2;
+                if (payment >= min && payment <= max)
+                    rides.add(ride);
+            }
+        }
+        return rides;
     }
 
     public interface Action<T> {

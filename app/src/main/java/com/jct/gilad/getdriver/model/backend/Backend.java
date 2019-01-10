@@ -1,5 +1,6 @@
 package com.jct.gilad.getdriver.model.backend;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
@@ -23,9 +24,9 @@ public interface Backend {
 
     ArrayList<Ride> getAvailableRidesByDestCity(Location location);
 
-    ArrayList<Ride> getAvailableRidesCloseToDriver(Driver driver);
+    ArrayList<Ride> getAvailableRidesCloseToLocation(Location location);
 
     ArrayList<Ride> getRidesByDate(Date date);
 
-    ArrayList<Ride> getRidesByPayment();
+    ArrayList<Ride> getRidesByPayment(double min, double max);
 }
