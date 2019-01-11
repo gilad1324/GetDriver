@@ -22,7 +22,14 @@
     <string name="err_msg_email">Enter valid email address</string>
     <string name="err_msg_pass">the password to short</string>
     <string name="err_msg_phone">Enter valid phone number</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
     <string name="msg_booked">Your driver has been successfully booked</string>
-    <string name="err_msg_det">the details are not currect</string>
+    <string name="err_msg_det">the details are not correct</string>
     <string name="err_msg_alr">the password and the email alredy exist</string>
 </resources>
