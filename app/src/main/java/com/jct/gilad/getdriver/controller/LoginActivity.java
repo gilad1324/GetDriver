@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -24,8 +25,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Context co;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,25 +32,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViews();
     }
 
-    private void findViews(){
-        EmailEditText=(AutoCompleteTextView)findViewById(R.id.email);
-        PasswordEditText=(EditText)findViewById(R.id.password);
-        SignUpButton= (Button) findViewById(R.id.sign_up_button);
-        LogInButton= (Button) findViewById(R.id.Log_in_button);
-
-
-
+    private void findViews() {
+        EmailEditText = (AutoCompleteTextView) findViewById(R.id.email);
+        PasswordEditText = (EditText) findViewById(R.id.password);
+        SignUpButton = (Button) findViewById(R.id.sign_up_button);
+        LogInButton = (Button) findViewById(R.id.Log_in_button);
+        SignUpButton.setOnClickListener(this);
+        LogInButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(v==SignUpButton){
-            Intent myIntent = new Intent(v.getContext(), signUpActivity.class);
-            startActivityForResult(myIntent, 0);
+        if (v == SignUpButton) {
+            startActivity(new Intent(LoginActivity.this,signUpActivity.class));
         }
 
-        if(v==LogInButton){
-            co=v.getContext();
+        if (v == LogInButton) {
+
+            co = v.getContext();
             logIn();
 
         }
@@ -59,20 +57,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void logIn() {
-        String email=EmailEditText.getText().toString().trim();
-        String password=PasswordEditText.getText().toString().trim();
-        ArrayList<String> emails =BackendFactorySingleton.getBackend(this).getDriversEmails();
-        if(BackendFactorySingleton.getBackend(this).chackPassword(password,email)) {
+        String email = EmailEditText.getText().toString().trim();
+        String password = PasswordEditText.getText().toString().trim();
+        ArrayList<String> emails = BackendFactorySingleton.getBackend(this).getDriversEmails();
+        if (BackendFactorySingleton.getBackend(this).chackPassword(password, email)) {
             Toast.makeText(getApplicationContext(), R.string.err_msg_det, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent myIntent = new Intent(co, MainActivity.class);
-        myIntent.putExtra("driverEmail",email);
+        myIntent.putExtra("driverEmail", email);
         startActivityForResult(myIntent, 0);
-
-
-
-
 
 
     }

@@ -32,4 +32,5 @@
     <string name="msg_booked">Your driver has been successfully booked</string>
     <string name="err_msg_det">the details are not correct</string>
     <string name="err_msg_alr">the password and the email alredy exist</string>
+    <string name="TT_contact_developer">Contact the developer</string>
 </resources>
