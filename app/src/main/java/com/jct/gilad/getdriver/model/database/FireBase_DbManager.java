@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +76,67 @@ public class FireBase_DbManager implements Backend {
 
             }
         });
+    }
+    public void RideBeProgress(Ride ride) throws Exception {
+        if (ride.getStatus() == Status1.AVAILABLE)
+            ride.setStatus(Status1.INPROGRESS);
+        else
+            throw new Exception("the drive not available!");
+    }
+    public Void updateRide(final Ride toUpdate, final Action<String> action) {
+        final String key = (toUpdate.getClientPhoneNumber());
+        RidesRef.child(key).setValue(toUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                action.onSuccess(toUpdate.getClientPhoneNumber());
+                action.onProgress("upload Driver data", 100);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                action.onFailure(e);
+                action.onProgress("error upload Driver data", 100);
+            }
+        });
+        return null;
+    }
+
+    private static ChildEventListener rideRefChildEventListener;
+    public void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange) {
+        if (notifyDataChange != null) {
+            if (rideRefChildEventListener != null) {
+                notifyDataChange.onFailure(new Exception("first unNotify ride list"));
+            }
+            RidesList.clear();
+            rideRefChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Ride ride = dataSnapshot.getValue(Ride.class);
+                    String p = dataSnapshot.getKey();
+                    try {
+                        ride.setClientPhoneNumber(p);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    RidesList.add(ride);
+                    notifyDataChange.OnDataChanged(RidesList);
+                }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    notifyDataChange.onFailure(databaseError.toException());
+                }
+            };
+            RidesRef.addChildEventListener(rideRefChildEventListener);
+        }
     }
 
     @Override

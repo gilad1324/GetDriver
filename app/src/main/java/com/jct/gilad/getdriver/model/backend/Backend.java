@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
+import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.entities.Driver;
 import com.jct.gilad.getdriver.model.entities.Ride;
 
@@ -21,6 +22,12 @@ public interface Backend {
     ArrayList<Ride> getFinishedRides();
 
     ArrayList<Ride> getRidesByDriver(Driver driver);
+
+    public void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange);
+
+    public void RideBeProgress(Ride ride) throws Exception;
+
+    public Void updateRide(final Ride toUpdate, final FireBase_DbManager.Action<String> action);
 
     ArrayList<Ride> getAvailableRidesByDestCity(Location location);
 

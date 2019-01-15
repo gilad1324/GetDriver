@@ -1,5 +1,7 @@
 package com.jct.gilad.getdriver.model.entities;
 
+import android.location.Location;
+
 public class Driver {
     private String lastName;
     private String firstName;
@@ -8,6 +10,8 @@ public class Driver {
     private String phoneNumber;
     private String email;
     private String creditCard;
+    private Location currentLocation;
+
 
     public Driver(String lastName, String firstName, String password, String id, String phoneNumber, String email, String creditCard) {
         this.lastName = lastName;
@@ -73,5 +77,13 @@ public class Driver {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
     }
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 
 
 public class Ride {
-    public Ride(Status1 status, Location sourceLocation, Location destLocation, String clientName, String clientPhoneNumber, String clientEmail, String driverID) {
+    public Ride(Status1 status, MyLocation sourceLocation, MyLocation destLocation, String clientName, String clientPhoneNumber, String clientEmail, String driverID) {
         this.status = status;
         this.sourceLocation = sourceLocation;
         this.destLocation = destLocation;
@@ -17,10 +17,18 @@ public class Ride {
         this.clientEmail = clientEmail;
         this.driverID = driverID;
     }
+    public Ride() {
+        this.status = status.AVAILABLE;
+        this.clientEmail = "";
+        this.clientName = "";
+        this.destLocation = new MyLocation();
+        this.sourceLocation = new MyLocation();
+        this.clientPhoneNumber = "";
+    }
 
     private Status1 status;
-    private Location sourceLocation;
-    private Location destLocation;
+    private MyLocation sourceLocation;
+    private MyLocation destLocation;
     private Date startTime;
     private Date endTime;
     private String clientName;
@@ -44,19 +52,19 @@ public class Ride {
         this.status = status;
     }
 
-    public Location getSourceLocation() {
+    public MyLocation getSourceLocation() {
         return sourceLocation;
     }
 
-    public void setSourceLocation(Location sourceLocation) {
+    public void setSourceLocation(MyLocation sourceLocation) {
         this.sourceLocation = sourceLocation;
     }
 
-    public Location getDestLocation() {
+    public MyLocation getDestLocation() {
         return destLocation;
     }
 
-    public void setDestLocation(Location destLocation) {
+    public void setDestLocation(MyLocation destLocation) {
         this.destLocation = destLocation;
     }
 
