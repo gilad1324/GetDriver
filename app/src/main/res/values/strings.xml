@@ -47,4 +47,7 @@
     <string name="take_the_ride">take the ride</string>
     <string name="update">update ride</string>
     <string name="pass_progress">the ride pass to progress rides</string>
+    <string name="start">start</string>
+    <string name="end">End</string>
+    <string name="endRide">End the ride</string>
 </resources>
