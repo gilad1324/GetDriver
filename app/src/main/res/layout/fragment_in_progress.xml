@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="@string/full_name" />
 
-    <TextView
+    <EditText
         android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hint_phone" />
-        <TextView
+        <EditText
             android:id="@+id/PhoneEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start" />
-        <TextView
+        <EditText
             android:id="@+id/startLocationEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,8 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/end" />
-            <TextView
-                android:id="@+id/endLocationEditLocation"
+            <EditText
+                android:id="@+id/endLocationEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="" />
