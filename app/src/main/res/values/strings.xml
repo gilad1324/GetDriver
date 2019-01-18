@@ -50,4 +50,6 @@
     <string name="start">start</string>
     <string name="end">End</string>
     <string name="endRide">End the ride</string>
+    <string name="no_ride">there no ride in progress</string>
+    <string name="pass_FINISHED">FINISHED</string>
 </resources>

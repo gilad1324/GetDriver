@@ -83,6 +83,13 @@ public class FireBase_DbManager implements Backend {
         else
             throw new Exception("the drive not available!");
     }
+
+    public void RideBeFINISHED(Ride ride) throws Exception {
+        if (ride.getStatus() == Status1.INPROGRESS)
+            ride.setStatus(Status1.FINISHED);
+        else
+            throw new Exception("the drive not progress!");
+    }
     public Void updateRide(final Ride toUpdate, final Action<String> action) {
         final String key = (toUpdate.getClientPhoneNumber());
         RidesRef.child(key).setValue(toUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -196,6 +203,14 @@ public class FireBase_DbManager implements Backend {
             if (ride.getStatus() == Status1.FINISHED)
                 rides.add(ride);
         return rides;
+    }
+
+    public Ride getProgressRide() {
+
+        for (Ride ride : RidesList)
+            if (ride.getStatus() == Status1.INPROGRESS)
+                return ride;
+        return null;
     }
 
     @Override

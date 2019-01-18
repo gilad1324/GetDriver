@@ -21,11 +21,15 @@ public interface Backend {
 
     ArrayList<Ride> getFinishedRides();
 
+    Ride getProgressRide();
+
     ArrayList<Ride> getRidesByDriver(Driver driver);
 
     public void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange);
 
     public void RideBeProgress(Ride ride) throws Exception;
+
+    void RideBeFINISHED(Ride ride) throws Exception;
 
     public Void updateRide(final Ride toUpdate, final FireBase_DbManager.Action<String> action);
 
