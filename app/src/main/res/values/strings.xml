@@ -52,4 +52,5 @@
     <string name="endRide">End the ride</string>
     <string name="no_ride">there no ride in progress</string>
     <string name="pass_FINISHED">FINISHED</string>
+    <string name="msg_err">error</string>
 </resources>

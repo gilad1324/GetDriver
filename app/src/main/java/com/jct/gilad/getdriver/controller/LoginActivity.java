@@ -60,13 +60,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String email = EmailEditText.getText().toString().trim();
         String password = PasswordEditText.getText().toString().trim();
         ArrayList<String> emails = BackendFactorySingleton.getBackend(this).getDriversEmails();
-        if (BackendFactorySingleton.getBackend(this).chackPassword(password, email)) {
+        if (email==""||password=="") {
             Toast.makeText(getApplicationContext(), R.string.err_msg_det, Toast.LENGTH_SHORT).show();
             return;
         }
-        Intent myIntent = new Intent(co, MainActivity.class);
-        myIntent.putExtra("driverEmail", email);
-        startActivityForResult(myIntent, 0);
+        if (BackendFactorySingleton.getBackend(this).chackPassword(password, email)) {
+            Intent myIntent = new Intent(co, MainActivity.class);
+            myIntent.putExtra("driverEmail", email);
+            startActivityForResult(myIntent, 0);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.err_msg_det, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
     }

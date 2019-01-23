@@ -1,5 +1,8 @@
 package com.jct.gilad.getdriver.controller;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
@@ -38,6 +42,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     private TextInputLayout CreditCard_InputLayout;
     private TextInputLayout Email_InputLayout;
     private TextInputLayout Password_InputLayout;
+    Context co;
 
 
 
@@ -73,12 +78,14 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         PhoneEditText.addTextChangedListener(new MyTextWatcher(PhoneEditText));
         PasswordEditText.addTextChangedListener(new MyTextWatcher(PasswordEditText));
         EmailEditText.addTextChangedListener(new MyTextWatcher(EmailEditText));
+        SignUpButton.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
         if(v==SignUpButton) {
+            co = v.getContext();
             submitForm();
 
         }
@@ -127,35 +134,45 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void addDriver() {
-        try{
-        String FirstName=FirstNameEditText.getText().toString().trim();
-        String LastName=LastNameEditText.getText().toString().trim();
-        String ID=IDEditText.getText().toString().trim();
-        String Phone=PhoneEditText.getText().toString().trim();
-        String CreditCard=CreditCardEditText.getText().toString().trim();
-        String Email=EmailEditText.getText().toString().trim();
-        String Password=PasswordEditText.getText().toString().trim();
-        Driver driver=new Driver(LastName,FirstName,Password,ID,Phone,Email,CreditCard);
+        try {
+            String FirstName = FirstNameEditText.getText().toString().trim();
+            String LastName = LastNameEditText.getText().toString().trim();
+            String ID = IDEditText.getText().toString().trim();
+            String Phone = PhoneEditText.getText().toString().trim();
+            String CreditCard = CreditCardEditText.getText().toString().trim();
+            String Email = EmailEditText.getText().toString().trim();
+            String Password = PasswordEditText.getText().toString().trim();
+            final Driver driver = new Driver(LastName, FirstName, Password, ID, Phone, Email, CreditCard);
 
-        BackendFactorySingleton.getBackend(this).addDriver(driver, new FireBase_DbManager.Action<String>() {
-            @Override
-            public void onSuccess(String obj) {
-                Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
-            }
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    return BackendFactorySingleton.getBackend(getApplicationContext()).addDriver(driver, new FireBase_DbManager.Action<String>() {
+                        @Override
+                        public void onSuccess(String obj) {
+                            Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
+                        }
 
-            @Override
-            public void onFailure(Exception exception) {
+                        @Override
+                        public void onFailure(Exception exception) {
+                            Toast.makeText(getApplicationContext(), R.string.msg_err, Toast.LENGTH_LONG).show();
 
-            }
+                        }
 
-            @Override
-            public void onProgress(String status, double percent) {
+                        @Override
+                        public void onProgress(String status, double percent) {
 
-            }
-        });
-    } catch (Exception e) {
+                        }
+                    });
+                }
+            }.execute();
+            startActivity(new Intent(signUpActivity.this, LoginActivity.class));;
 
+        }
+     catch (Exception e) {
+         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
+
 
 
     }

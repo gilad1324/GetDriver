@@ -1,6 +1,5 @@
 package com.jct.gilad.getdriver.model.database;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,7 +8,6 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,6 +81,7 @@ public class FireBase_DbManager implements Backend {
         else
             throw new Exception("the drive not available!");
     }
+
 
     public void RideBeFINISHED(Ride ride) throws Exception {
         if (ride.getStatus() == Status1.INPROGRESS)
@@ -170,7 +169,7 @@ public class FireBase_DbManager implements Backend {
     }
 
     @Override
-    public void addDriver(final Driver driver, final Action<String> action) {
+    public Void addDriver(final Driver driver, final Action<String> action) {
         String key = driver.getId();
         DriversRef.child(key).setValue(driver).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -182,9 +181,12 @@ public class FireBase_DbManager implements Backend {
             @Override
             public void onFailure(@NonNull Exception e) {
                 action.onFailure(e);
-                action.onProgress("error upload driver data", 100);
+                action.onProgress("error upload Driver data", 100);
             }
         });
+
+
+        return null;
     }
 
     @Override

@@ -23,6 +23,16 @@ public class Driver {
         this.creditCard = creditCard;
     }
 
+    public Driver(){
+        this.firstName = "";
+        this.lastName="";
+        this.id = "";
+        this.phoneNumber = "";
+        this.email = "";
+        this.creditCard = "";
+        this.password = "";
+    }
+
     public String getLastName() {
         return lastName;
     }

@@ -1,6 +1,5 @@
 package com.jct.gilad.getdriver.model.backend;
 
-import android.content.Context;
 import android.location.Location;
 
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
@@ -15,7 +14,7 @@ import java.util.List;
 public interface Backend {
     ArrayList<String> getDriversNames();
 
-    void addDriver(Driver driver, FireBase_DbManager.Action<String> action);
+    Void addDriver(Driver driver, FireBase_DbManager.Action<String> action);
 
     ArrayList<Ride> getAvailableRides();
 
