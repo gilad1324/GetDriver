@@ -24,6 +24,8 @@ import java.util.List;
 
 public class FireBase_DbManager implements Backend {
     public List<Ride> rides = new ArrayList<>();
+    public List<Ride> rides1 = new ArrayList<>();
+
     public List<Driver> drivers = new ArrayList<>();
     public CurrentLocation location;
 
@@ -48,7 +50,6 @@ public class FireBase_DbManager implements Backend {
             return true;
         else
             throw new Exception("the drive isn't available!");
-
 
 
     }
@@ -164,8 +165,15 @@ public class FireBase_DbManager implements Backend {
     public List<Ride> getAvailableRides(List<Ride> notifyRides) {
         for (Ride ride : notifyRides) {
             if (ride.getStatus() != Status1.AVAILABLE)
-                if (ride.getStatus() != Status1.AVAILABLE)
-                    notifyRides.remove(ride);
+                notifyRides.remove(ride);
+        }
+        return notifyRides;
+    }
+
+    public List<Ride> getProgressRides(List<Ride> notifyRides) {
+        for (Ride ride : notifyRides) {
+            if (ride.getStatus() != Status1.INPROGRESS)
+                notifyRides.remove(ride);
         }
         return notifyRides;
     }
@@ -182,24 +190,28 @@ public class FireBase_DbManager implements Backend {
         notifyToRideList(new NotifyDataChange<List<Ride>>() {
             @Override
             public void OnDataChanged(List<Ride> notifyRides) {
-                rides = notifyRides;
-                for (Ride ride : rides) {
+                for (Ride ride : notifyRides) {
                     if (ride.getStatus() != Status1.INPROGRESS)
-                        rides.remove(ride);
+                        notifyRides.remove(ride);
                 }
+                rides1 = notifyRides;
             }
+
             @Override
             public void onFailure(Exception exception) {
 
             }
         });
-        return rides;
+        return rides1;
     }
 
-    public Ride getProgressRide(String id) {
-        for (Ride ride : progressRides())
-            if (ride.getDriverID() == id)
+    @Override
+    public Ride getProgressRide(List<Ride> notifyRides, String id) {
+        rides = notifyRides;
+        for (Ride ride : rides) {
+            if (ride.getStatus() == Status1.INPROGRESS && ride.getDriverID().trim().equals(id.trim()))
                 return ride;
+        }
         return null;
     }
 
@@ -224,6 +236,7 @@ public class FireBase_DbManager implements Backend {
         });
         return rides;
     }
+
     @Override
     public Driver getDriverByID(final String ID) {
         final Driver[] d = new Driver[1];

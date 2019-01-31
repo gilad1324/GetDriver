@@ -14,11 +14,13 @@ import android.widget.Toast;
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
+import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.entities.Ride;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.jct.gilad.getdriver.model.backend.CurrentLocation.getPlace;
 
@@ -55,7 +57,17 @@ public class ProgressFragment extends Fragment {
         startLocationEditText = (EditText) view.findViewById(R.id.startLocationEditText);
         EndLocationEditText = (EditText) view.findViewById(R.id.endLocationEditText);
         button = (Button) view.findViewById(R.id.endRide);
-        ride = BackendFactorySingleton.getBackend().getProgressRide(driverId);
+        BackendFactorySingleton.getBackend().notifyToRideList(new NotifyDataChange<List<Ride>>() {
+            @Override
+            public void OnDataChanged(List<Ride> obj) {
+                ride = BackendFactorySingleton.getBackend().getProgressRide(obj, driverId);
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
         if (ride == null) {
             Toast.makeText(context, R.string.no_ride, Toast.LENGTH_LONG).show();
             return view;

@@ -18,7 +18,7 @@ public interface Backend {
 
     List<Ride> getFinishedRides(List<Ride> rides);
 
-    Ride getProgressRide(String id);
+    Ride getProgressRide(List<Ride> notifyRides, String id);
 
     public List<Ride> progressRides();
 
