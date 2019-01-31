@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
-import com.jct.gilad.getdriver.model.backend.CurentLocation;
+import com.jct.gilad.getdriver.model.backend.CurrentLocation;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 import com.jct.gilad.getdriver.model.entities.Ride;
 
@@ -26,8 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.jct.gilad.getdriver.model.backend.CurentLocation.getPlace;
-import static com.jct.gilad.getdriver.model.backend.CurentLocation.locationA;
+import static com.jct.gilad.getdriver.model.backend.CurrentLocation.getPlace;
+import static com.jct.gilad.getdriver.model.backend.CurrentLocation.locationA;
 
 class ExpandableListAdapter extends BaseExpandableListAdapter implements Filterable {
     private Context context;
@@ -35,19 +35,18 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
     Filter distanceFilter;
     private List<Ride> rideList;
     private List<Ride> orginRideList;
-    CurentLocation location;
+    CurrentLocation location;
     private LayoutInflater inflater;
 
 
-
-    public ExpandableListAdapter(Context context, List<Ride> rideList,String driverID) {
-            this.context = context;
-            this.rideList = rideList;
-            this.driverID = driverID;
-            this.orginRideList = rideList;
-            location = new CurentLocation(context);
-            location.getLocation(context);
-        }
+    public ExpandableListAdapter(Context context, List<Ride> rideList, String driverID) {
+        this.context = context;
+        this.rideList = rideList;
+        this.driverID = driverID;
+        this.orginRideList = rideList;
+        location = new CurrentLocation(context);
+        location.getLocation(context);
+    }
 
 
     @Override
@@ -62,7 +61,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
 
     @Override
     public Object getGroup(int groupPosition) {
-        return  rideList.get(groupPosition);
+        return rideList.get(groupPosition);
     }
 
     @Override
@@ -102,13 +101,13 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
             viewHolder = (ExpandableListAdapter.ViewHolder) convertView.getTag();
         }
         // Populate the data into the template view using the data object
-        viewHolder.destination.setText(getPlace(ride.getDestLocation(),context));
+        viewHolder.destination.setText(getPlace(ride.getDestLocation()));
         float distance = (ride.getSourceLocation().distanceTo(locationA));
         distance /= 100;
-        int temp = (int)(distance);
-        distance = (float)(temp) / 10;
-        if(locationA.getLatitude() != 0 || locationA.getLongitude() != 0)
-            viewHolder.distance.setText(String.valueOf(distance)+ context.getString(R.string.KM));
+        int temp = (int) (distance);
+        distance = (float) (temp) / 10;
+        if (locationA.getLatitude() != 0 || locationA.getLongitude() != 0)
+            viewHolder.distance.setText(String.valueOf(distance) + context.getString(R.string.KM));
         // Return the completed view to render on screen
         return convertView;
     }
@@ -116,9 +115,9 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Ride ride = (Ride) getChild(groupPosition,childPosition);
+        final Ride ride = (Ride) getChild(groupPosition, childPosition);
         final ExpandableListAdapter.ViewHolder2 viewHolder2;
-        if(convertView == null){
+        if (convertView == null) {
             viewHolder2 = new ExpandableListAdapter.ViewHolder2();
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.ride_item, null);
@@ -129,19 +128,19 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
             viewHolder2.messageButton = (Button) convertView.findViewById(R.id.buttonMessage);
             viewHolder2.startButton = (Button) convertView.findViewById(R.id.buttonTakeDrive);
             convertView.setTag(viewHolder2);
-        }else {
+        } else {
             viewHolder2 = (ViewHolder2) convertView.getTag();
         }
-        viewHolder2.source.setText(getPlace(ride.getSourceLocation(),context));
+        viewHolder2.source.setText(getPlace(ride.getSourceLocation()));
         viewHolder2.full_name.setText(ride.getClientName());
         viewHolder2.startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uri = "waze://?ll="+ride.getDestLocation().getLatitude()+", "+ride.getDestLocation().getLongitude()+"&navigate=yes";
+                String uri = "waze://?ll=" + ride.getDestLocation().getLatitude() + ", " + ride.getDestLocation().getLongitude() + "&navigate=yes";
                 context.startActivity(new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse(uri)));
                 try {
-                    BackendFactorySingleton.getBackend(context).RideBeProgress(ride);
+                    BackendFactorySingleton.getBackend().RideBeProgress(ride);
                 } catch (Exception e) {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -149,10 +148,10 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
                 Date date = Calendar.getInstance().getTime();
                 ride.setStartTime(date);
                 ride.setDriverID(driverID);
-                new AsyncTask<Void,Void,Void>() {
+                new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        return BackendFactorySingleton.getBackend(context).updateRide(ride, new FireBase_DbManager.Action<String>() {
+                        return BackendFactorySingleton.getBackend().updateRide(ride, new FireBase_DbManager.Action<String>() {
                             @Override
                             public void onSuccess(String obj) {
                                 Toast.makeText(context, R.string.update, Toast.LENGTH_LONG).show();
@@ -170,7 +169,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
                         });
                     }
                 }.execute();
-                Toast.makeText(context, R.string.pass_progress,Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.pass_progress, Toast.LENGTH_LONG).show();
 //                String smsText = context.getString(R.string.Taxi_on_the_way);
 //                Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("sms:" + ride.getPhone()));
 //                smsIntent.putExtra("sms_body", smsText);
@@ -181,7 +180,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
             @Override
             public void onClick(View v) {
                 Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "smsto",ride.getClientPhoneNumber(),null));
+                        "smsto", ride.getClientPhoneNumber(), null));
                 context.startActivity(smsIntent);
             }
         });
@@ -189,7 +188,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
             @Override
             public void onClick(View v) {
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto",ride.getClientEmail(), null));
+                        "mailto", ride.getClientEmail(), null));
                 context.startActivity(Intent.createChooser(emailIntent, "choose an email client"));
             }
         });
@@ -203,6 +202,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
         });
         return convertView;
     }
+
     public class ViewHolder2 {
         TextView full_name;
         TextView source;
@@ -219,7 +219,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
 
     @Override
     public Filter getFilter() {
-        if(distanceFilter == null)
+        if (distanceFilter == null)
             distanceFilter = new DistanceFilter();
         return distanceFilter;
     }
@@ -233,7 +233,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
         rideList = orginRideList;
     }
 
-    private class DistanceFilter extends Filter{
+    private class DistanceFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
@@ -242,18 +242,17 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
                 // No filter implemented we return all the list
                 results.values = orginRideList;
                 results.count = orginRideList.size();
-            }else if (!Character.isDigit(constraint.charAt(constraint.length()-1))){
+            } else if (!Character.isDigit(constraint.charAt(constraint.length() - 1))) {
                 results.values = rideList;
                 results.count = rideList.size();
-            }
-            else {
+            } else {
                 // We perform filtering operation
                 List<Ride> nRideList = new ArrayList<Ride>();
                 for (Ride ride : orginRideList) {
                     float distance = (ride.getSourceLocation().distanceTo(locationA));
                     distance /= 100;
-                    int temp = (int)(distance);
-                    distance = (float)(temp) / 10;
+                    int temp = (int) (distance);
+                    distance = (float) (temp) / 10;
                     if (distance <= Float.valueOf(constraint.toString()))
                         nRideList.add(ride);
                 }
@@ -262,6 +261,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
             }
             return results;
         }
+
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             rideList = (List<Ride>) results.values;

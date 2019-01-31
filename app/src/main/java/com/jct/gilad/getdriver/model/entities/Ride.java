@@ -23,7 +23,7 @@ public class Ride {
         this.clientName = "";
         this.destLocation = new MyLocation();
         this.sourceLocation = new MyLocation();
-        this.clientPhoneNumber = "";
+        this.clientPhoneNumber = "-9999";
     }
 
     private Status1 status;

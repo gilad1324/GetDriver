@@ -9,9 +9,13 @@
             android:icon="@drawable/ic_person_pin_circle_black_24dp"
             android:title="Available drives" />
         <item
-            android:id="@+id/nav_drives_history"
-            android:icon="@drawable/ic_history_black_24dp"
+            android:id="@+id/nav_progress_drives"
+            android:icon="@drawable/ic_progress_drives"
             android:title="Drives history" />
+        <item
+        android:id="@+id/nav_drives_history"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="Drives history" />
     </group>
 
     <item android:title="Exit">

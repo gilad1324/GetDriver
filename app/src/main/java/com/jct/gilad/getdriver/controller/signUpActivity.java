@@ -1,11 +1,15 @@
 package com.jct.gilad.getdriver.controller;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,6 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
@@ -29,6 +38,8 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     private EditText EmailEditText;
     private EditText PasswordEditText;
     private Button SignUpButton;
+    FirebaseAuth auth;
+
 
     //TextInputLayout  argument
     private TextInputLayout firstName_InputLayout;
@@ -40,7 +51,6 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     private TextInputLayout Password_InputLayout;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +60,28 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void findViews() {
         //edit text
-        FirstNameEditText=(EditText) findViewById(R.id.firstName);
-        LastNameEditText=(EditText) findViewById(R.id.lastName);
-        IDEditText=(EditText) findViewById(R.id.idEditText);
-        PhoneEditText=(EditText) findViewById(R.id.PhoneEditText);
-        CreditCardEditText=(EditText) findViewById(R.id.credit_card);
-        EmailEditText=(EditText) findViewById(R.id.email);
-        PasswordEditText=(EditText)findViewById(R.id.password);
-        SignUpButton= (Button) findViewById(R.id.email_sign_up_button);
+        FirstNameEditText = (EditText) findViewById(R.id.firstName);
+        LastNameEditText = (EditText) findViewById(R.id.lastName);
+        IDEditText = (EditText) findViewById(R.id.idEditText);
+        PhoneEditText = (EditText) findViewById(R.id.PhoneEditText);
+        CreditCardEditText = (EditText) findViewById(R.id.credit_card);
+        EmailEditText = (EditText) findViewById(R.id.email);
+        PasswordEditText = (EditText) findViewById(R.id.password);
+        SignUpButton = (Button) findViewById(R.id.email_sign_up_button);
         //input layout
         firstName_InputLayout = (TextInputLayout) findViewById(R.id.firstName_InputLayout);
-        lastName_InputLayout = (TextInputLayout) findViewById(R.id.lastName_InputLayout);;
-        ID_InputLayout = (TextInputLayout) findViewById(R.id.ID_InputLayout);;
-        Phone_InputLayout = (TextInputLayout) findViewById(R.id.Phone_InputLayout);;
-        CreditCard_InputLayout = (TextInputLayout) findViewById(R.id.CreditCard_InputLayout);;
-        Email_InputLayout = (TextInputLayout) findViewById(R.id.Email_InputLayout);;
-        Password_InputLayout = (TextInputLayout) findViewById(R.id.Password_InputLayout);;
+        lastName_InputLayout = (TextInputLayout) findViewById(R.id.lastName_InputLayout);
+
+        ID_InputLayout = (TextInputLayout) findViewById(R.id.ID_InputLayout);
+
+        Phone_InputLayout = (TextInputLayout) findViewById(R.id.Phone_InputLayout);
+
+        CreditCard_InputLayout = (TextInputLayout) findViewById(R.id.CreditCard_InputLayout);
+
+        Email_InputLayout = (TextInputLayout) findViewById(R.id.Email_InputLayout);
+
+        Password_InputLayout = (TextInputLayout) findViewById(R.id.Password_InputLayout);
+
 
         FirstNameEditText.addTextChangedListener(new MyTextWatcher(FirstNameEditText));
         LastNameEditText.addTextChangedListener(new MyTextWatcher(LastNameEditText));
@@ -73,22 +89,19 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         PhoneEditText.addTextChangedListener(new MyTextWatcher(PhoneEditText));
         PasswordEditText.addTextChangedListener(new MyTextWatcher(PasswordEditText));
         EmailEditText.addTextChangedListener(new MyTextWatcher(EmailEditText));
+        SignUpButton.setOnClickListener(this);
 
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
     public void onClick(View v) {
-        if(v==SignUpButton) {
-            submitForm();
-
+        if (v == SignUpButton) {
+            submitFormAndAddDriver();
         }
-
-
     }
-    private void submitForm() {
 
-
-
+    private void submitFormAndAddDriver() {
         if (!validateFirstName()) {
             Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
             return;
@@ -116,8 +129,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(getApplicationContext(), R.string.err_msg_pass, Toast.LENGTH_SHORT).show();
             return;
         }
-        if(BackendFactorySingleton.getBackend(this).chackPassword(PasswordEditText.getText().toString().trim(),EmailEditText.getText().toString().trim()))
-        {
+        if (BackendFactorySingleton.getBackend().checkPassword(PasswordEditText.getText().toString().trim(), EmailEditText.getText().toString().trim())) {
             Toast.makeText(getApplicationContext(), R.string.err_msg_alr, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -127,35 +139,81 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void addDriver() {
-        try{
-        String FirstName=FirstNameEditText.getText().toString().trim();
-        String LastName=LastNameEditText.getText().toString().trim();
-        String ID=IDEditText.getText().toString().trim();
-        String Phone=PhoneEditText.getText().toString().trim();
-        String CreditCard=CreditCardEditText.getText().toString().trim();
-        String Email=EmailEditText.getText().toString().trim();
-        String Password=PasswordEditText.getText().toString().trim();
-        Driver driver=new Driver(LastName,FirstName,Password,ID,Phone,Email,CreditCard);
+        try {
+            String FirstName = FirstNameEditText.getText().toString().trim();
+            String LastName = LastNameEditText.getText().toString().trim();
+            String ID = IDEditText.getText().toString().trim();
+            String Phone = PhoneEditText.getText().toString().trim();
+            String CreditCard = CreditCardEditText.getText().toString().trim();
+            String Email = EmailEditText.getText().toString().trim();
+            String Password = PasswordEditText.getText().toString();
+            final Driver driver = new Driver(LastName, FirstName, Password, ID, Phone, Email, CreditCard);
 
-        BackendFactorySingleton.getBackend(this).addDriver(driver, new FireBase_DbManager.Action<String>() {
-            @Override
-            public void onSuccess(String obj) {
-                Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
-            }
+//            auth.createUserWithEmailAndPassword(EmailEditText.getText().toString().trim(), PasswordEditText.getText().toString())
+//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            if (task.isSuccessful()) {
+//                                new AsyncTask<Void, Void, Void>() {
+//                                    @Override
+//                                    protected Void doInBackground(Void... voids) {
+//                                        return BackendFactorySingleton.getBackend().addDriver(driver, new FireBase_DbManager.Action<String>() {
+//                                            @Override
+//                                            public void onSuccess(String obj) {
+//                                                Toast.makeText(getBaseContext(), "onSuccess" + obj, Toast.LENGTH_LONG).show();
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Exception exception) {
+//                                                Toast.makeText(getBaseContext(), "onFailure" + exception.getMessage(), Toast.LENGTH_LONG).show();
+//                                            }
+//
+//                                            public void onProgress(String status, double percent) {
+//                                            }
+//                                        });
+//                                    }
+//                                }.execute();
+//                                startActivity(new Intent(signUpActivity.this, LoginActivity.class));
+//                            } else {
+//                                Toast.makeText(signUpActivity.this, R.string.firebase_error, Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+            auth.createUserWithEmailAndPassword(Email, Password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser user = auth.getCurrentUser();
+                                BackendFactorySingleton.getBackend().addDriver(driver, new FireBase_DbManager.Action<String>() {
+                                    @Override
+                                    public void onSuccess(String obj) {
+                                        Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
+                                    }
 
-            @Override
-            public void onFailure(Exception exception) {
+                                    @Override
+                                    public void onFailure(Exception exception) {
 
-            }
+                                    }
 
-            @Override
-            public void onProgress(String status, double percent) {
+                                    @Override
+                                    public void onProgress(String status, double percent) {
 
-            }
-        });
-    } catch (Exception e) {
+                                    }
+                                });
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(signUpActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
 
-    }
+                            // ...
+                        }
+                    });
+        } catch (Exception e) {
+
+        }
 
 
     }
@@ -201,7 +259,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
     private boolean validatePassword() {
         String password = PasswordEditText.getText().toString().trim();
 
-        if (password.length()<4) {
+        if (password.length() < 4) {
             Password_InputLayout.setError(getString(R.string.err_msg_pass));
             requestFocus(PasswordEditText);
             return false;
@@ -253,12 +311,10 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         return !TextUtils.isEmpty(phone) && Patterns.PHONE.matcher(phone).matches();
     }
 
-
-
     private boolean validateId() {
         String iD = IDEditText.getText().toString().trim();
 
-        if (iD.length()<9) {
+        if (iD.length() < 6) {
             ID_InputLayout.setError(getString(R.string.err_msg_FirstName));
             requestFocus(IDEditText);
             return false;
@@ -267,13 +323,12 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         return true;
-
     }
 
     private boolean validateFirstName() {
         String name = FirstNameEditText.getText().toString().trim();
 
-        if (name.length()<2) {
+        if (name.length() < 2) {
             firstName_InputLayout.setError(getString(R.string.err_msg_FirstName));
             requestFocus(FirstNameEditText);
             return false;
@@ -284,10 +339,11 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         return true;
 
     }
+
     private boolean validateLastName() {
         String name = LastNameEditText.getText().toString().trim();
 
-        if (name.length()<2) {
+        if (name.length() < 2) {
             lastName_InputLayout.setError(getString(R.string.err_msg_FirstName));
             requestFocus(LastNameEditText);
             return false;
@@ -298,11 +354,10 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         return true;
 
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
-    }
+}

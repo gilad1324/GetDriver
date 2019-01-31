@@ -1,11 +1,14 @@
 package com.jct.gilad.getdriver.controller;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,14 +22,40 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
+import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
+import com.jct.gilad.getdriver.model.database.NotifyDataChange;
+import com.jct.gilad.getdriver.model.entities.Driver;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    String driverId;
+    String driverEmail;
+    String driverPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BackendFactorySingleton.getBackend().notifyToDriverList(new NotifyDataChange<List<Driver>>() {
+            @Override
+            public void OnDataChanged(List<Driver> drivers) {
+                Intent intent = getIntent();
+                driverEmail = intent.getExtras().getString("driverEmail");
+                driverPassword = intent.getExtras().getString("driverPassword");
+                for (Driver driver : drivers) {
+                    if (driver.getEmail().matches(driverEmail) && driver.getPassword().matches(driverPassword))
+                        driverId = driver.getId();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,25 +114,53 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_available_drives) {
-            // Handle the camera action
-        } else if (id == R.id.nav_drives_history) {
-
-        } else if (id == R.id.nav_exit) {
-
+        switch (id) {
+            case R.id.nav_available_drives:
+                AvailableFragment availableFragment = new AvailableFragment();
+                availableFragment.getInstance(driverId);
+                loadFragment(availableFragment);
+                break;
+            case R.id.nav_progress_drives:
+                ProgressFragment progressFragment = new ProgressFragment();
+                progressFragment.getInstance(driverId);
+                loadFragment(progressFragment);
+                break;
+//            case R.id.nav_drives_history:
+//                FinishedRidesFragment finishedRidesFragment = new FinishedRidesFragment();
+//                finishedRidesFragment.getIntance(driverName);
+//                loadFragment(finishedRidesFragment);
+//                break;
+            case R.id.nav_exit:
+                Toast.makeText(getApplicationContext(), R.string.msg_bye,Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                finish();
+                break;
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.closeDrawer(GravityCompat.START);
+        //getSupportActionBar().setTitle(R.string.close);
+        supportInvalidateOptionsMenu();
+        drawer.addDrawerListener(toggle);
         return true;
+    }
+
+    public void loadFragment(android.support.v4.app.Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
 
     protected void sendEmail() {
         Intent mailIntent = new Intent(Intent.ACTION_VIEW);
-        Uri data = Uri.parse("mailto:?subject=" + "GetDriver"+ "&body=" + "Email message goes here" + "&to=" + "ginagar@g.jct.ac.il");
+        Uri data = Uri.parse("mailto:?subject=" + "GetDriver" + "&body=" + "Email message goes here" + "&to=" + "ginagar@g.jct.ac.il");
         mailIntent.setData(data);
         startActivity(Intent.createChooser(mailIntent, "Send mail..."));
     }
