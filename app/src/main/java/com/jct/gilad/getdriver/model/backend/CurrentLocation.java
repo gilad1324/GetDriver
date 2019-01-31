@@ -21,17 +21,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static com.jct.gilad.getdriver.controller.AvailableFragment.listAdapter;
+//import static com.jct.gilad.getdriver.controller.AvailableFragment.listAdapter;
 
-public class CurentLocation {
-    Context context;
+public class CurrentLocation {
+    public static Context context;
     boolean isGPSEnabled;
     boolean isNetworkEnabled;
     LocationManager locationManager;
     LocationListener locationListener;
     public static MyLocation locationA = new MyLocation();
 
-    public CurentLocation(Context context) {
+    public CurrentLocation(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -95,7 +95,7 @@ public class CurentLocation {
     }
 
     //this func get location and convert it to name of location
-    public static String getPlace(Location location, Context context) {
+    public static String getPlace(MyLocation location) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;
         try {

@@ -10,7 +10,7 @@ public class Driver {
     private String phoneNumber;
     private String email;
     private String creditCard;
-    private Location currentLocation;
+    private MyLocation currentLocation;
 
 
     public Driver(String lastName, String firstName, String password, String id, String phoneNumber, String email, String creditCard) {
@@ -24,13 +24,13 @@ public class Driver {
     }
 
     public Driver(){
+        this.lastName = "";
         this.firstName = "";
-        this.lastName="";
-        this.id = "";
+        this.password = "-999";
+        this.id = "-999";
         this.phoneNumber = "";
-        this.email = "";
+        this.email = "_Nothing";
         this.creditCard = "";
-        this.password = "";
     }
 
     public String getLastName() {
@@ -89,11 +89,11 @@ public class Driver {
         this.password = password;
     }
 
-    public Location getCurrentLocation() {
+    public MyLocation getCurrentLocation() {
         return currentLocation;
     }
 
-    public void setCurrentLocation(Location currentLocation) {
+    public void setCurrentLocation(MyLocation currentLocation) {
         this.currentLocation = currentLocation;
     }
 }

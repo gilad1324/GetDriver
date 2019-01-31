@@ -1,46 +1,52 @@
 package com.jct.gilad.getdriver.model.backend;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
+//import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.entities.Driver;
 import com.jct.gilad.getdriver.model.entities.Ride;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.List;
 
 public interface Backend {
-    ArrayList<String> getDriversNames();
+    List<String> getDriversNames();
 
     Void addDriver(Driver driver, FireBase_DbManager.Action<String> action);
 
-    ArrayList<Ride> getAvailableRides();
+    List<Ride> getAvailableRides(List<Ride> rides);
 
-    ArrayList<Ride> getFinishedRides();
+    List<Ride> getFinishedRides(List<Ride> rides);
 
-    Ride getProgressRide();
+    Ride getProgressRide(Driver driver);
 
-    ArrayList<Ride> getRidesByDriver(Driver driver);
+    List<Ride> getRidesByDriver(final String driverName);
 
-    public void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange);
-
-    public void RideBeProgress(Ride ride) throws Exception;
+    void RideBeProgress(Ride ride) throws Exception;
 
     void RideBeFINISHED(Ride ride) throws Exception;
 
-    public Void updateRide(final Ride toUpdate, final FireBase_DbManager.Action<String> action);
+    Void updateRide(final Ride toUpdate, final FireBase_DbManager.Action<String> action);
 
-    ArrayList<Ride> getAvailableRidesByDestCity(Location location);
+    List<Ride> getAvailableRidesByDestCity(final String City);
 
-    ArrayList<Ride> getAvailableRidesCloseToLocation(Location location);
+    List<Ride> getAvailableRidesForDriver(final Driver driver);
 
-    ArrayList<Ride> getRidesByDate(Date date);
+    List<Ride> getRidesByDate(Date date);
 
-    ArrayList<Ride> getRidesByPayment(double min, double max);
+    List<Ride> getRidesByPayment(final double maxPayment);
 
-    ArrayList<String> getDriversEmails();
+    List<String> getDriversEmails();
 
-    public boolean chackPassword(String password,String email);
+    boolean checkPassword(String password, String email);
+
+    Driver getDriverByID(final String ID);
+
+    void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange);
+
+    void notifyToDriverList(final NotifyDataChange<List<Driver>> notifyDataChange);
 }

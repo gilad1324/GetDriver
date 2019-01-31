@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-
+import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.database.NotifyDataChange;
@@ -26,14 +26,13 @@ public class AvailableFragment extends Fragment {
     View view;
     public static ExpandableListAdapter listAdapter;
     EditText distanceFilter;
-    String driverName;
+    String driverId;
     private ExpandableListView lv;
     public static List<Ride> rideArrayList = new ArrayList<>();
 
-    public void getIntance(String driverName) {
-        this.driverName = driverName;
+    public void getInstance(String id) {
+        this.driverId = id;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -64,7 +63,7 @@ public class AvailableFragment extends Fragment {
             }
         });
         final Context context = this.getContext();
-        BackendFactorySingleton.getBackend(context).notifyToRideList(new NotifyDataChange<List<Ride>>() {
+        BackendFactorySingleton.getBackend().notifyToRideList(new NotifyDataChange<List<Ride>>() {
             @Override
             public void OnDataChanged(List<Ride> obj) {
                 rideArrayList = obj;
@@ -73,7 +72,7 @@ public class AvailableFragment extends Fragment {
                         rideArrayList.remove(ride);
                 }
                 if (rideArrayList.size() != 0) {
-                    listAdapter = new ExpandableListAdapter(context, rideArrayList, driverName);
+                    listAdapter = new ExpandableListAdapter(context, rideArrayList, driverId);
                     lv.setAdapter(listAdapter);
                     listAdapter.notifyDataSetChanged();
                 }
