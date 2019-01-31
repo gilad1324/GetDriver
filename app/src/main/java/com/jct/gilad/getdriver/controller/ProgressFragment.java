@@ -55,7 +55,7 @@ public class ProgressFragment extends Fragment {
         startLocationEditText = (EditText) view.findViewById(R.id.startLocationEditText);
         EndLocationEditText = (EditText) view.findViewById(R.id.endLocationEditText);
         button = (Button) view.findViewById(R.id.endRide);
-        ride = BackendFactorySingleton.getBackend().getProgressRide(BackendFactorySingleton.getBackend().getDriverByID(driverId));
+        ride = BackendFactorySingleton.getBackend().getProgressRide(driverId);
         if (ride == null) {
             Toast.makeText(context, R.string.no_ride, Toast.LENGTH_LONG).show();
             return view;
@@ -69,7 +69,7 @@ public class ProgressFragment extends Fragment {
             public void onClick(View v) {
 
                 try {
-                    BackendFactorySingleton.getBackend().RideBeFINISHED(ride);
+                    BackendFactorySingleton.getBackend().RideBeFINISHED(ride);//its gona be problom!!!
                 } catch (Exception e) {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

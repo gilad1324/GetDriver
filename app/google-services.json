@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1088279440154-t7fdma56jh5nppof9ic9egma2s5mm5li.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jct.gilad.getdriver",
+            "certificate_hash": "b87a1c7b57a40ae1342d57a4edb91b54ba85c825"
+          }
+        },
+        {
           "client_id": "1088279440154-4iah604g14v33nfann85vc83m8eak3lf.apps.googleusercontent.com",
           "client_type": 3
         }

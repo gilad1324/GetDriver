@@ -1,8 +1,5 @@
 package com.jct.gilad.getdriver.model.backend;
 
-import android.content.Context;
-import android.location.Location;
-
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 //import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.database.NotifyDataChange;
@@ -11,7 +8,6 @@ import com.jct.gilad.getdriver.model.entities.Ride;
 
 import java.util.List;
 import java.util.Date;
-import java.util.List;
 
 public interface Backend {
     List<String> getDriversNames();
@@ -22,11 +18,13 @@ public interface Backend {
 
     List<Ride> getFinishedRides(List<Ride> rides);
 
-    Ride getProgressRide(Driver driver);
+    Ride getProgressRide(String id);
+
+    public List<Ride> progressRides();
 
     List<Ride> getRidesByDriver(final String driverName);
 
-    void RideBeProgress(Ride ride) throws Exception;
+    boolean RideCanBeProgress(Ride ride) throws Exception;
 
     void RideBeFINISHED(Ride ride) throws Exception;
 

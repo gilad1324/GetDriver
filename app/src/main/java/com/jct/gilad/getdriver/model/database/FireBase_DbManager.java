@@ -1,9 +1,6 @@
 package com.jct.gilad.getdriver.model.database;
 
-import android.content.Context;
-import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,7 +10,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.jct.gilad.getdriver.model.backend.Backend;
 import com.jct.gilad.getdriver.model.entities.Driver;
 import com.jct.gilad.getdriver.model.entities.Ride;
@@ -21,12 +17,10 @@ import com.jct.gilad.getdriver.model.entities.Status1;
 import com.jct.gilad.getdriver.model.backend.CurrentLocation;
 
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class FireBase_DbManager implements Backend {
     public List<Ride> rides = new ArrayList<>();
@@ -49,11 +43,14 @@ public class FireBase_DbManager implements Backend {
     }
 
     @Override
-    public void RideBeProgress(Ride ride) throws Exception {
+    public boolean RideCanBeProgress(Ride ride) throws Exception {
         if (ride.getStatus() == Status1.AVAILABLE)
-            ride.setStatus(Status1.INPROGRESS);
+            return true;
         else
             throw new Exception("the drive isn't available!");
+
+
+
     }
 
     @Override
@@ -181,23 +178,41 @@ public class FireBase_DbManager implements Backend {
         return notifyRides;
     }
 
-    public Ride getProgressRide(Driver driver) {
-        for (Ride ride : getRidesByDriver(driver.getFirstName() + " " + driver.getLastName()))
-            if (ride.getStatus() == Status1.INPROGRESS)
+    public List<Ride> progressRides() {
+        notifyToRideList(new NotifyDataChange<List<Ride>>() {
+            @Override
+            public void OnDataChanged(List<Ride> notifyRides) {
+                rides = notifyRides;
+                for (Ride ride : rides) {
+                    if (ride.getStatus() != Status1.INPROGRESS)
+                        rides.remove(ride);
+                }
+            }
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
+        return rides;
+    }
+
+    public Ride getProgressRide(String id) {
+        for (Ride ride : progressRides())
+            if (ride.getDriverID() == id)
                 return ride;
         return null;
     }
 
     @Override
-    public List<Ride> getRidesByDriver(final String driverName) {
+    public List<Ride> getRidesByDriver(final String driverId) {
         notifyToRideList(new NotifyDataChange<List<Ride>>() {
             @Override
             public void OnDataChanged(List<Ride> notifyRides) {
                 rides = notifyRides;
-                String name;
+                String id;
                 for (Ride ride : rides) {
-                    name = getDriverByID(ride.getDriverID()).getFirstName() + " " + getDriverByID(ride.getDriverID()).getLastName();
-                    if (!driverName.equals(name))
+                    id = ride.getDriverID();
+                    if (!driverId.equals(id))
                         rides.remove(ride);
                 }
             }

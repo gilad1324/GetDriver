@@ -19,6 +19,7 @@ import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.backend.CurrentLocation;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 import com.jct.gilad.getdriver.model.entities.Ride;
+import com.jct.gilad.getdriver.model.entities.Status1;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -136,13 +137,15 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
         viewHolder2.startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uri = "waze://?ll=" + ride.getDestLocation().getLatitude() + ", " + ride.getDestLocation().getLongitude() + "&navigate=yes";
-                context.startActivity(new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse(uri)));
+//                String uri = "waze://?ll=" + ride.getDestLocation().getLatitude() + ", " + ride.getDestLocation().getLongitude() + "&navigate=yes";
+//                context.startActivity(new Intent(android.content.Intent.ACTION_VIEW,
+//                        Uri.parse(uri)));
                 try {
-                    BackendFactorySingleton.getBackend().RideBeProgress(ride);
+                    if(BackendFactorySingleton.getBackend().RideCanBeProgress(ride))
+                        ride.setStatus(Status1.INPROGRESS);
                 } catch (Exception e) {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date date = Calendar.getInstance().getTime();
