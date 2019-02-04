@@ -22,11 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.signUpActivity"></activity>
+        <activity android:name=".controller.signUpActivity" />
         <activity
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".model.backend.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".model.backend.MyReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

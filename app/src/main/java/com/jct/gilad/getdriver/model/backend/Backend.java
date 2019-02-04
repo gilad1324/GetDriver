@@ -31,7 +31,7 @@ public interface Backend {
     Void updateRide(final Ride toUpdate, final FireBase_DbManager.Action<String> action);
 
     List<Ride> getAvailableRidesByDestCity(final String City);
-
+    
     List<Ride> getAvailableRidesForDriver(final Driver driver);
 
     List<Ride> getRidesByDate(Date date);
@@ -47,4 +47,6 @@ public interface Backend {
     void notifyToRideList(final NotifyDataChange<List<Ride>> notifyDataChange);
 
     void notifyToDriverList(final NotifyDataChange<List<Driver>> notifyDataChange);
+
+    void stopNotifyToRidesList();
 }

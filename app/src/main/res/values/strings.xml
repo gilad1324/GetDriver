@@ -54,4 +54,6 @@
     <string name="pass_FINISHED">FINISHED</string>
     <string name="msg_bye">Goodbye! see you soon! ت</string>
     <string name="firebase_error">failure to load firebase</string>
+    <string name="relevent_ride">you have a new relevant ride to take</string>
+    <string name="new_reqest">new request for drive</string>
 </resources>

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
+import com.jct.gilad.getdriver.model.backend.MyService;
 import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.entities.Driver;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(MainActivity.this, MyService.class));
         BackendFactorySingleton.getBackend().notifyToDriverList(new NotifyDataChange<List<Driver>>() {
             @Override
             public void OnDataChanged(List<Driver> drivers) {

@@ -215,6 +215,8 @@ public class FireBase_DbManager implements Backend {
         return null;
     }
 
+
+
     @Override
     public List<Ride> getRidesByDriver(final String driverId) {
         notifyToRideList(new NotifyDataChange<List<Ride>>() {
@@ -398,7 +400,7 @@ public class FireBase_DbManager implements Backend {
         }
     }
 
-    public static void stopNotifyToRidesList() {
+    public void stopNotifyToRidesList() {
         if (rideRefChildEventListener != null) {
             RidesRef.removeEventListener(rideRefChildEventListener);
             rideRefChildEventListener = null;
