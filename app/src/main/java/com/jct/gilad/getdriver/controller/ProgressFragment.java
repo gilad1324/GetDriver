@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
+import com.jct.gilad.getdriver.model.backend.CurrentLocation;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
 import com.jct.gilad.getdriver.model.database.NotifyDataChange;
 import com.jct.gilad.getdriver.model.entities.Ride;
@@ -26,14 +28,16 @@ import static com.jct.gilad.getdriver.model.backend.CurrentLocation.getPlace;
 
 
 public class ProgressFragment extends Fragment {
-    EditText nameEditText;
-    EditText phoneEditText;
-    EditText startLocationEditText;
-    EditText EndLocationEditText;
+    TextView nameEditText;
+    TextView phoneEditText;
+    TextView startLocationEditText;
+    TextView EndLocationEditText;
     Button button;
     Context context;
     Ride ride;
     String driverId;
+    CurrentLocation location;
+
 
 
     @Override
@@ -52,15 +56,17 @@ public class ProgressFragment extends Fragment {
                              Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_in_progress, container, false);
-        nameEditText = (EditText) view.findViewById(R.id.nameEditText);
-        phoneEditText = (EditText) view.findViewById(R.id.PhoneEditText);
-        startLocationEditText = (EditText) view.findViewById(R.id.startLocationEditText);
-        EndLocationEditText = (EditText) view.findViewById(R.id.endLocationEditText);
+        nameEditText = (TextView) view.findViewById(R.id.nameEditText);
+        phoneEditText = (TextView) view.findViewById(R.id.PhoneEditText);
+        startLocationEditText = (TextView) view.findViewById(R.id.startLocationEditText);
+        EndLocationEditText = (TextView) view.findViewById(R.id.endLocationEditText);
         button = (Button) view.findViewById(R.id.endRide);
+        location = new CurrentLocation(context);
         BackendFactorySingleton.getBackend().notifyToRideList(new NotifyDataChange<List<Ride>>() {
             @Override
             public void OnDataChanged(List<Ride> obj) {
                 ride = BackendFactorySingleton.getBackend().getProgressRide(obj, driverId);
+                enterThingToL(ride);
             }
 
             @Override
@@ -68,14 +74,11 @@ public class ProgressFragment extends Fragment {
 
             }
         });
-        if (ride == null) {
+        if (ride == null)
             Toast.makeText(context, R.string.no_ride, Toast.LENGTH_LONG).show();
-            return view;
-        }
-        nameEditText.setText(ride.getClientName());
-        phoneEditText.setText(ride.getClientPhoneNumber());
-        startLocationEditText.setText(getPlace(ride.getSourceLocation()));
-        EndLocationEditText.setText(getPlace(ride.getDestLocation()));
+
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +121,16 @@ public class ProgressFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void enterThingToL(Ride ride) {
+        if(ride!=null) {
+            nameEditText.setText(ride.getClientName());
+            phoneEditText.setText(ride.getClientPhoneNumber());
+            startLocationEditText.setText(location.getPlace(ride.getSourceLocation()));
+            EndLocationEditText.setText(location.getPlace(ride.getDestLocation()));
+        }
+
     }
 
 

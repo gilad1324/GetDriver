@@ -40,6 +40,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
     private LayoutInflater inflater;
 
 
+
     public ExpandableListAdapter(Context context, List<Ride> rideList, String driverID) {
         this.context = context;
         this.rideList = rideList;
