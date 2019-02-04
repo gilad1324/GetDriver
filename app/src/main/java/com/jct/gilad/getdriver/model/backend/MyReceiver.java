@@ -27,8 +27,10 @@ public class MyReceiver extends BroadcastReceiver {
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         builder.setAutoCancel(true);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
+            builder.setSmallIcon(R.drawable.ic_exit_to_app_black_24dp);
+           // builder.setColor(getColor(context, R.color.bg_login));
         } else {
+            builder.setSmallIcon(R.drawable.ic_exit_to_app_black_24dp);
         }
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
