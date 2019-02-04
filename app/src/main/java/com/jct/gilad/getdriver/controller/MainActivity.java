@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     String driverId;
     String driverEmail;
     String driverPassword;
+    String driverName;
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AccessContact();
- //       startService(new Intent(MainActivity.this, MyService.class));
+        //       startService(new Intent(MainActivity.this, MyService.class));
         BackendFactorySingleton.getBackend().notifyToDriverList(new NotifyDataChange<List<Driver>>() {
             @Override
             public void OnDataChanged(List<Driver> drivers) {
@@ -59,8 +60,10 @@ public class MainActivity extends AppCompatActivity
                 driverEmail = intent.getExtras().getString("driverEmail");
                 driverPassword = intent.getExtras().getString("driverPassword");
                 for (Driver driver : drivers) {
-                    if (driver.getEmail().matches(driverEmail) && driver.getPassword().matches(driverPassword))
+                    if (driver.getEmail().matches(driverEmail) && driver.getPassword().matches(driverPassword)) {
                         driverId = driver.getId();
+                        driverName = driver.getFirstName() + " " + driver.getLastName();
+                    }
                 }
             }
 
@@ -131,22 +134,22 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_available_drives:
                 AvailableFragment availableFragment = new AvailableFragment();
-                availableFragment.getInstance(driverId);
+                availableFragment.newInstance(driverId);
                 loadFragment(availableFragment);
                 break;
             case R.id.nav_progress_drives:
                 ProgressFragment progressFragment = new ProgressFragment();
-                progressFragment.getInstance(driverId);
+                progressFragment.newInstance(driverId);
                 loadFragment(progressFragment);
                 break;
-//            case R.id.nav_drives_history:
-//                FinishedRidesFragment finishedRidesFragment = new FinishedRidesFragment();
-//                finishedRidesFragment.getIntance(driverName);
-//                loadFragment(finishedRidesFragment);
-//                break;
+            case R.id.nav_drives_history:
+                HistoryFragment historyFragment = new HistoryFragment();
+                historyFragment.newInstance(driverName);
+                loadFragment(historyFragment);
+                break;
             case R.id.nav_exit:
-                Toast.makeText(getApplicationContext(), R.string.msg_bye,Toast.LENGTH_LONG).show();
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                Toast.makeText(getApplicationContext(), R.string.msg_bye, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
                 break;
         }
@@ -207,6 +210,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
     }
+
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage(message)

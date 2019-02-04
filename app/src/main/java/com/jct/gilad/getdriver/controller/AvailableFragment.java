@@ -30,9 +30,10 @@ public class AvailableFragment extends Fragment {
     private ExpandableListView lv;
     public static List<Ride> rideArrayList = new ArrayList<>();
 
-    public void getInstance(String id) {
+    public void newInstance(String id) {
         this.driverId = id;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment

@@ -46,7 +46,7 @@ public class ProgressFragment extends Fragment {
 
     }
 
-    public void getInstance(String id) {
+    public void newInstance(String id) {
         this.driverId = id;
     }
 
