@@ -117,7 +117,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if (!validateId()) {
-            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.err_msg_id, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -190,6 +190,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
                                     @Override
                                     public void onSuccess(String obj) {
                                         Toast.makeText(getApplicationContext(), R.string.msg_booked, Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(signUpActivity.this, LoginActivity.class));
                                     }
 
                                     @Override

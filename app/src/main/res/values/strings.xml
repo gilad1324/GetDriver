@@ -63,4 +63,5 @@
     <string name="fetch">Data Displayed Successfuly!</string>
     <string name="new_reqest">new request for drive</string>
     <string name="relevent_ride">you have a new relevant ride to take</string>
+    <string name="err_msg_id">to shourt id</string>
 </resources>
