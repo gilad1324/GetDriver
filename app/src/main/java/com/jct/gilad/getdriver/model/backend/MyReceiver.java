@@ -26,16 +26,14 @@ public class MyReceiver extends BroadcastReceiver {
         builder.setContentIntent(contentIntent);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         builder.setAutoCancel(true);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.ic_exit_to_app_black_24dp);
-           // builder.setColor(getColor(context, R.color.bg_login));
-        } else {
-            builder.setSmallIcon(R.drawable.ic_exit_to_app_black_24dp);
-        }
+
+        builder.setSmallIcon(R.drawable.ic_new_drive);
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
-    public  void initChannels(Context context) {
+
+    public void initChannels(Context context) {
         if (Build.VERSION.SDK_INT < 26) {
             return;
         }

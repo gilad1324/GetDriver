@@ -6,8 +6,9 @@
     tools:context=".controller.HistoryFragment">
 
     <ListView
+        android:id="@+id/FinishedRides"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/FinishedRides"/>
+        android:layout_marginTop="60dp" />
 
 </FrameLayout>
