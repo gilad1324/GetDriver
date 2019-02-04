@@ -12,7 +12,7 @@
     <string name="title_activity_login">היכנס</string>
     <string name="action_sign_up">הירשם</string>
     <string name="action_log_in">היכנס</string>
-    <string name="hint_phone">מספר פלאפון</string>
+    <string name="hint_phone">"מספר פלאפון "</string>
     <string name="action_id">תעודת זהות</string>
     <string name="credit_card">כרטיס אשראי</string>
     <string name="err_msg_FirstName">שם קצר מדי</string>
@@ -35,8 +35,8 @@
     <string name="send_message_to_passenger">שלח הודעה לנוסע</string>
     <string name="update">עדכון נסיעה</string>
     <string name="pass_progress">הנסיעה הועברה לנסיעה בטיפול</string>
-    <string name="start">התחלה</string>
-    <string name="end">סוף</string>
+    <string name="start">"התחלה "</string>
+    <string name="end">"סוף "</string>
     <string name="endRide">סוף הנסיעה</string>
     <string name="no_ride">אין נסיעות בטיפול</string>
     <string name="pass_FINISHED">נגמר</string>

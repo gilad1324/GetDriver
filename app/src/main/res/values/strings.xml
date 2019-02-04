@@ -39,7 +39,7 @@
     <string name="distance">distance</string>
     <string name="destination">destination</string>
     <string name="KM">KM</string>
-    <string name="full_name">full name</string>
+    <string name="full_name">"full name "</string>
     <string name="source">source:</string>
     <string name="send_email_to_passenger">send email to passenger</string>
     <string name="call_to_passenger">call to passenger</string>
@@ -47,8 +47,8 @@
     <string name="take_the_ride">take the ride</string>
     <string name="update">update ride</string>
     <string name="pass_progress">the ride pass to progress rides</string>
-    <string name="start">start</string>
-    <string name="end">End</string>
+    <string name="start">"start "</string>
+    <string name="end">"End "</string>
     <string name="endRide">End the ride</string>
     <string name="no_ride">there no ride in progress</string>
     <string name="pass_FINISHED">FINISHED</string>
