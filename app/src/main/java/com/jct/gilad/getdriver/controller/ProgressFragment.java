@@ -74,8 +74,7 @@ public class ProgressFragment extends Fragment {
 
             }
         });
-        if (ride == null)
-            Toast.makeText(context, R.string.no_ride, Toast.LENGTH_LONG).show();
+
 
 
 

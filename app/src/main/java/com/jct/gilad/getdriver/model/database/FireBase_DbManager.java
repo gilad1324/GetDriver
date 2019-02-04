@@ -207,8 +207,13 @@ public class FireBase_DbManager implements Backend {
 
     @Override
     public Ride getProgressRide(List<Ride> notifyRides, String id) {
+        if (id.equals(null))
+            return null;
         rides = notifyRides;
         for (Ride ride : rides) {
+            if(ride.getDriverID().equals(null))
+                return null;
+
             if (ride.getStatus() == Status1.INPROGRESS && ride.getDriverID().trim().equals(id.trim()))
                 return ride;
         }
