@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AccessContact();
-        //       startService(new Intent(MainActivity.this, MyService.class));
+        startService(new Intent(MainActivity.this, MyService.class));
         BackendFactorySingleton.getBackend().notifyToDriverList(new NotifyDataChange<List<Driver>>() {
             @Override
             public void OnDataChanged(List<Driver> drivers) {
