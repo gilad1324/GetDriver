@@ -56,4 +56,8 @@
     <string name="firebase_error">failure to load firebase</string>
     <string name="relevent_ride">you have a new relevant ride to take</string>
     <string name="new_reqest">new request for drive</string>
+    <string name="store">Data Stored Successfuly!</string>
+    <string name="empty">Please Fill all the Fields!!</string>
+    <string name="fetch">Data Displayed Successfuly!</string>
+    <string name="remember_me">remember me</string>
 </resources>
