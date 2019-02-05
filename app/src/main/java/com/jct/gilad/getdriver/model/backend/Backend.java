@@ -24,6 +24,8 @@ public interface Backend {
 
     List<Ride> getRidesByDriver(final String driverName);
 
+    public List<Driver> getDrivers();
+
     boolean RideCanBeProgress(Ride ride) throws Exception;
 
     void RideBeFINISHED(Ride ride) throws Exception;

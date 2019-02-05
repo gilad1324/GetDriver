@@ -117,7 +117,7 @@ public class signUpActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if (!validateId()) {
-            Toast.makeText(getApplicationContext(), R.string.err_msg_FirstName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.err_msg_id, Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -72,6 +72,18 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+        if(driverId==null) {
+            Intent intent = getIntent();
+            driverEmail = intent.getExtras().getString("driverEmail");
+            driverPassword = intent.getExtras().getString("driverPassword");
+            for (Driver driver : BackendFactorySingleton.getBackend().getDrivers()) {
+                if (driver.getEmail().matches(driverEmail) && driver.getPassword().matches(driverPassword)) {
+                    driverId = driver.getId();
+                    driverName = driver.getFirstName() + " " + driver.getLastName();
+                }
+            }
+
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -103,6 +115,13 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
 
     @Override

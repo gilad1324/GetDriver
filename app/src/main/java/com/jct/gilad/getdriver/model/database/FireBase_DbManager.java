@@ -26,6 +26,10 @@ public class FireBase_DbManager implements Backend {
     public List<Ride> rides = new ArrayList<>();
     public List<Ride> rides1 = new ArrayList<>();
 
+    public List<Driver> getDrivers() {
+        return drivers;
+    }
+
     public List<Driver> drivers = new ArrayList<>();
     public CurrentLocation location;
 
@@ -207,11 +211,11 @@ public class FireBase_DbManager implements Backend {
 
     @Override
     public Ride getProgressRide(List<Ride> notifyRides, String id) {
-        if (id.equals(null))
+        if (id==null)
             return null;
         rides = notifyRides;
         for (Ride ride : rides) {
-            if(ride.getDriverID().equals(null))
+            if(ride.getDriverID()==null)
                 return null;
 
             if (ride.getStatus() == Status1.INPROGRESS && ride.getDriverID().trim().equals(id.trim()))
