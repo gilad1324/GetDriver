@@ -18,6 +18,7 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         initChannels(context);
+        //say where to go
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, LoginActivity.class), 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
