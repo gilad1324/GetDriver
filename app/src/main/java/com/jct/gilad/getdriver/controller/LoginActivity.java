@@ -109,36 +109,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-    public void loginUser() {
-        final String email = EmailEditText.getText().toString().trim();
-        final String Ipassword = PasswordEditText.getText().toString();
-        try {
-            auth.signInWithEmailAndPassword(email, Ipassword)
-                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this, "the email or the password is not correct!", Toast.LENGTH_LONG).show();
-                            } else {
-                                Intent intent = getIntent();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("driverEmail",email).putExtra("driverPassword",Ipassword));
-                                if(remember.isChecked()) {
-                                    Store();
-                                }
-                                finish();
-                            }
-                        }
-                    });
-        } catch (Exception e) {
-            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
+//    public void loginUser() {
+//        final String email = EmailEditText.getText().toString().trim();
+//        final String Ipassword = PasswordEditText.getText().toString();
+//        try {
+//            auth.signInWithEmailAndPassword(email, Ipassword)
+//                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            if (!task.isSuccessful()) {
+//                                Toast.makeText(LoginActivity.this, "the email or the password is not correct!", Toast.LENGTH_LONG).show();
+//                            } else {
+//                                Intent intent = getIntent();
+//                                startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("driverEmail",email).putExtra("driverPassword",Ipassword));
+//                                if(remember.isChecked()) {
+//                                    Store();
+//                                }
+//                                finish();
+//                            }
+//                        }
+//                    });
+//        } catch (Exception e) {
+//            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
+//    private void requestFocus(View view) {
+//        if (view.requestFocus()) {
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//        }
+//    }
 
     public void Store() {
         if (!EmailEditText.getText().toString().isEmpty() &&  !PasswordEditText.getText().toString().isEmpty()) {

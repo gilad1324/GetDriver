@@ -16,8 +16,7 @@
             android:layout_width="423dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="distance" />
+            android:inputType="textPersonName" />
 
         <ExpandableListView
             android:id="@+id/lv"

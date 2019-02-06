@@ -54,8 +54,6 @@ public class FireBase_DbManager implements Backend {
             return true;
         else
             throw new Exception("the drive isn't available!");
-
-
     }
 
     @Override
@@ -174,13 +172,13 @@ public class FireBase_DbManager implements Backend {
         return notifyRides;
     }
 
-    public List<Ride> getProgressRides(List<Ride> notifyRides) {
-        for (Ride ride : notifyRides) {
-            if (ride.getStatus() != Status1.INPROGRESS)
-                notifyRides.remove(ride);
-        }
-        return notifyRides;
-    }
+//    public List<Ride> getProgressRides(List<Ride> notifyRides) {
+//        for (Ride ride : notifyRides) {
+//            if (ride.getStatus() != Status1.INPROGRESS)
+//                notifyRides.remove(ride);
+//        }
+//        return notifyRides;
+//    }
 
     @Override
     public List<Ride> getFinishedRides(List<Ride> notifyRides) {
@@ -211,11 +209,11 @@ public class FireBase_DbManager implements Backend {
 
     @Override
     public Ride getProgressRide(List<Ride> notifyRides, String id) {
-        if (id==null)
+        if (id == null)
             return null;
         rides = notifyRides;
         for (Ride ride : rides) {
-            if(ride.getDriverID()==null)
+            if (ride.getDriverID() == null)
                 return null;
 
             if (ride.getStatus() == Status1.INPROGRESS && ride.getDriverID().trim().equals(id.trim()))
@@ -223,7 +221,6 @@ public class FireBase_DbManager implements Backend {
         }
         return null;
     }
-
 
 
     @Override
@@ -303,7 +300,7 @@ public class FireBase_DbManager implements Backend {
     }
 
     @Override
-    public List<Ride> getAvailableRidesForDriver(final Driver driver) {
+    public List<Ride> getRidesForDriver(final Driver driver) {
         notifyToRideList(new NotifyDataChange<List<Ride>>() {
             @Override
             public void OnDataChanged(List<Ride> notifyRides) {

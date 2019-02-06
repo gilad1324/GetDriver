@@ -30,7 +30,7 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"></FrameLayout>
+            android:layout_marginTop="60dp"></FrameLayout>
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -18,6 +18,7 @@ import com.jct.gilad.getdriver.R;
 import com.jct.gilad.getdriver.model.backend.BackendFactorySingleton;
 import com.jct.gilad.getdriver.model.backend.CurrentLocation;
 import com.jct.gilad.getdriver.model.database.FireBase_DbManager;
+import com.jct.gilad.getdriver.model.entities.Driver;
 import com.jct.gilad.getdriver.model.entities.Ride;
 import com.jct.gilad.getdriver.model.entities.Status1;
 
@@ -183,8 +184,18 @@ class ExpandableListAdapter extends BaseExpandableListAdapter implements Filtera
         viewHolder2.messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String driverName = null;
+                for (Driver driver : BackendFactorySingleton.getBackend().getDrivers()) {
+                    if (driver.getId().equals(driverID)) {
+
+                        driverName = driver.getFirstName() + " " + driver.getLastName();
+                    }
+                }
                 Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "smsto", ride.getClientPhoneNumber(), null));
+                
+                
+                smsIntent.putExtra("sms_body","I'm" + driverName+", I'm coming to you!");
                 context.startActivity(smsIntent);
             }
         });
